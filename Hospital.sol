@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.7.0;
+pragma solidity ^0.5.1;
 
 contract Hospital
 {
@@ -10,9 +10,9 @@ contract Hospital
     event BedAcq(address indexed temp);
     event BedRel(address indexed temp);
 
-    constructor(uint256 temp_size) public
+    constructor() public
     {
-        size = temp_size;
+        size = 5;
         owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
         emit OwnerSet(address(0), owner);
         for (uint i = 0; i < size; i++)
@@ -21,27 +21,37 @@ contract Hospital
             free_idx.push(i);
         }
     }
-    
-    function getOwner() public view returns (address) 
+
+    function getOwner() public view returns (address)
     {
         return owner;
     }
-    
+
+    function getFreeBeds() public view returns (uint256[])
+    {
+        return free_idx;
+    }
+
+    function getBeds() public view returns (address[])
+    {
+        return bed_arr;
+    }
+
     function requireBed(address from_address) public
     {
         if (free_idx.length == 0)
         {
-            BedAcq(address(0));
+            emit BedAcq(address(0));
         }
         else
         {
             uint256 temp_bed_num = free_idx[0];
             bed_arr[temp_bed_num] = from_address;
             free_idx.pop();
-            BedAcq(from_address);
+            emit BedAcq(from_address);
         }
     }
-    
+
     function releaseBed(address from_address) public
     {
         bool flag = false;
@@ -50,14 +60,13 @@ contract Hospital
             if (bed_arr[i] == from_address)
             {
                 flag = true;
-                BedRel(from_address);
+                emit BedRel(from_address);
                 bed_arr[i] = owner;
                 free_idx.push(i);
                 break;
             }
         }
         if (!flag)
-        BedRel(address(0));
-        
+            emit BedRel(address(0));
     }
 }

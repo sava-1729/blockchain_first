@@ -5,9 +5,11 @@ var web3 = new web3_lib('HTTP://127.0.0.1:7545')
 var cb_function = (err, val) => { console.log("error:", err, "returned: ", val); return val }
 
 const contractAddress = ''
-const contractABI = ''
+const contractABI = [{"inputs":[{"internalType":"uint256","name":"temp_size","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"temp","type":"address"}],"name":"BedAcq","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"temp","type":"address"}],"name":"BedRel","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnerSet","type":"event"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"bed_arr","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"free_idx","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from_address","type":"address"}],"name":"releaseBed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from_address","type":"address"}],"name":"requireBed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"size","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const Hospital = new web3.eth.Contract(contractABI, contractAddress)
+
+const ownerAddress = Hospital.methods.getOwner().call()
 
 function sign(txData, SENDER_PRIVATE_KEY)
 {
@@ -77,7 +79,7 @@ function reserve_bed(form)
     const SENDER_PRIVATE_KEY = form.skey.value
     const amount = web3.utils.toWei(form.amt.value, 'ether')
     const gasLimit = 40000
-    makeTransaction(SENDER_PUBLIC_KEY, SENDER_PRIVATE_KEY, contractAddress, amount, gasLimit, 'eth')
+    makeTransaction(SENDER_PUBLIC_KEY, SENDER_PRIVATE_KEY, ownerAddress, amount, gasLimit, 'eth')
 
     const request = Hospital.methods.requireBed(SENDER_PUBLIC_KEY).encodeABI()
     makeTransaction(SENDER_PUBLIC_KEY, SENDER_PRIVATE_KEY, contractAddress, request, gasLimit, 'fnc')
