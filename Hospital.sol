@@ -27,35 +27,30 @@ contract Hospital
         return owner;
     }
     
-    function requireBed(address to_address, uint256 amt) public
+    function requireBed(address from_address) public
     {
-        address temp_address = msg.sender;
-        if (amt > 10000 && to_address == owner)
+        if (free_idx.length == 0)
         {
-            if (free_idx.length == 0)
-            {
-                BedAcq(address(0));
-            }
-            else
-            {
-                uint256 temp_bed_num = free_idx[0];
-                bed_arr[temp_bed_num] = temp_address;
-                free_idx.pop();
-                BedAcq(temp_address);
-            }
+            BedAcq(address(0));
+        }
+        else
+        {
+            uint256 temp_bed_num = free_idx[0];
+            bed_arr[temp_bed_num] = from_address;
+            free_idx.pop();
+            BedAcq(from_address);
         }
     }
     
-    function releaseBed() public
+    function releaseBed(address from_address) public
     {
-        address temp = msg.sender;
         bool flag = false;
         for (uint i = 0; i < size; i++ )
         {
-            if (bed_arr[i] == temp)
+            if (bed_arr[i] == from_address)
             {
                 flag = true;
-                BedRel(msg.sender);
+                BedRel(from_address);
                 bed_arr[i] = owner;
                 free_idx.push(i);
                 break;
