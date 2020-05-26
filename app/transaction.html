@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src='transaction.js'></script>
+    <head>
+        <title> RV Hospital </title>
+    </head>
+    <body>
+        <h1 align='center'>RV Hospital</h1><br><br><br>
+        <h2 align='center' id='welcome'>Welcome!</h1><br><br><br>
+        <form align='center'>
+            <h3 align='center' id='welcome'>Want to reserve a bed?</h1><br><br>
+            <label>Public Key: <input type="text" id="pkey" name="pkey"></label><br><br>
+            <label>Private Key: <input type="password" id="skey" name="skey"></label><br><br>
+            <label>Transaction Hash: <input type="text" id="txhash" name="txhash"></label><br><br>
+            <input type="submit" onclick="reserve_bed(this.form)"></input>
+        </form>
+    </body>
+</html>

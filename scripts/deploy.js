@@ -1,5 +1,5 @@
 var web3_lib = require('web3')
-var tx_lib = require('ethereumjs-tx')
+var tx_lib = require('ethereumjs-tx').Transaction
 var web3 = new web3_lib('HTTP://127.0.0.1:7545')
 
 const creator_public_key = '0x211a2C2a94265F8c79b1d0a3b8540eF5F58e23aB'
