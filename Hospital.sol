@@ -3,10 +3,12 @@ pragma solidity >=0.4.22 <0.7.0;
 contract Hospital
 {
     address payable private owner;
-    uint256 size;
-    address[] bed_arr = new address[](0);
-    uint256[] free_idx = new uint256[](0);
+    uint256 public size;
+    address[] public bed_arr = new address[](0);
+    uint256[] public free_idx = new uint256[](0);
     event OwnerSet(address indexed oldOwner, address indexed newOwner);
+    event BedAcq(address indexed temp);
+    event BedRel(address indexed temp);
 
     constructor(uint256 temp_size) public
     {
@@ -15,7 +17,7 @@ contract Hospital
         emit OwnerSet(address(0), owner);
         for (uint i = 0; i < size; i++)
         {
-            bed_arr.push(address(0));
+            bed_arr.push(owner);
             free_idx.push(i);
         }
     }
@@ -25,32 +27,22 @@ contract Hospital
         return owner;
     }
     
-    
-    function requireBed() public payable
+    function requireBed(address to_address, uint256 amt) public
     {
         address temp_address = msg.sender;
-        uint256 amt = msg.value;
-        bool amt_payed = false;
-        if (amt > 10000)
+        if (amt > 10000 && to_address == owner)
         {
-            owner.transfer(amt);
-            amt_payed = false;
-            require (true, "Payment done");
-        }
-        else
-        {
-            require (true, "Payment failed");
-        }
-        
-        if (free_idx.length == 0 && amt_payed)
-        {
-            require (true, "No bed available");
-        }
-        else if (amt_payed)
-        {
-            uint256 temp_bed_num = free_idx[0];
-            bed_arr[temp_bed_num] = temp_address;
-            free_idx.pop();
+            if (free_idx.length == 0)
+            {
+                BedAcq(address(0));
+            }
+            else
+            {
+                uint256 temp_bed_num = free_idx[0];
+                bed_arr[temp_bed_num] = temp_address;
+                free_idx.pop();
+                BedAcq(temp_address);
+            }
         }
     }
     
@@ -63,12 +55,14 @@ contract Hospital
             if (bed_arr[i] == temp)
             {
                 flag = true;
-                require (true, "Bed released");
-                bed_arr[i] == address(0);
+                BedRel(msg.sender);
+                bed_arr[i] = owner;
                 free_idx.push(i);
                 break;
             }
         }
-            require(!flag, "No bed under this user");
+        if (!flag)
+        BedRel(address(0));
+        
     }
 }
