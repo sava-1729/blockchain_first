@@ -27,12 +27,12 @@ contract Hospital
         return owner;
     }
 
-    function getFreeBeds() public view returns (uint256[])
+    function getFreeBeds() public view returns (uint256[] memory)
     {
         return free_idx;
     }
 
-    function getBeds() public view returns (address[])
+    function getBeds() public view returns (address[] memory)
     {
         return bed_arr;
     }
@@ -45,7 +45,7 @@ contract Hospital
         }
         else
         {
-            uint256 temp_bed_num = free_idx[0];
+            uint256 temp_bed_num = free_idx[free_idx.length - 1];
             bed_arr[temp_bed_num] = from_address;
             free_idx.pop();
             emit BedAcq(from_address);
