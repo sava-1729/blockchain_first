@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script type="text/javascript" src="https://unpkg.com/web3@1.2.8/dist/web3.min.js"></script>
+    <script src="../scripts/meta_deploy.js"></script>
+    <head>
+        <title> RV Hospital </title>
+    </head>
+    <body onload="setup();">
+        <h1 align='center'>RV Hospital</h1><br><br>
+        <div id="loader" style="display: true;"></div>
+        <div align='center'>
+            <h3 id='welcome'>Ready to deploy?</h3><br><br>
+            <label>No. of beds: <input type="text" id="arg1"></label><br><br>
+            <label>Admission Cost: <input type="text" id="arg2"></label><br><br>
+            <label>Membership Cost: <input type="text" id="arg3"></label><br><br>
+            <label>Amount: <input type="text" id="amt" name="amt"></label><br><br>
+            <button id="submit" onclick="deployContract();">Deploy</button>
+        </div>
+    </body>
+</html>
